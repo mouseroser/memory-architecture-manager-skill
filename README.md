@@ -89,8 +89,8 @@ bash layer2-health-check.sh
 ## 安装
 
 ```bash
-git clone https://github.com/win4r/memory-architecture-manager.git
-openclaw plugins install --link ./memory-architecture-manager
+git clone https://github.com/mouseroser/memory-architecture-manager-skill.git
+openclaw plugins install --link ./memory-architecture-manager-skill
 ```
 
 ---
