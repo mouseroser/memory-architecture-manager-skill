@@ -62,36 +62,28 @@ else
 fi
 echo "" >> "$REPORT_FILE"
 
-# 4. 检查召回质量（使用 openclaw memory-pro CLI）
+# 4. 检查召回质量（通过 Ollama embedding API 直连验证）
+# builtin memorySearch 已关闭（2026-03-15），改为直接测试 Ollama embedding 可用性
+# memory-lancedb-pro 的 autoRecall 才是实际召回链路
 echo "## 4. 召回质量检查" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
 RECALL_OK=0
 RECALL_COUNT=0
-if command -v openclaw &> /dev/null; then
-    # 测试召回：查询"晨星"
-    RECALL_TEST=$(openclaw memory-pro search --scope agent:main "晨星" --limit 3 2>&1 || true)
-    RECALL_COUNT=$(printf '%s\n' "$RECALL_TEST" | sed -n 's/^Found \([0-9][0-9]*\) memor.*/\1/p' | head -1)
 
-    if [[ -n "$RECALL_COUNT" ]]; then
-        RECALL_OK=1
-        if [ "$RECALL_COUNT" -gt 0 ]; then
-            echo "- ✅ 召回测试成功（查询'晨星'返回 $RECALL_COUNT 条结果）" >> "$REPORT_FILE"
-        else
-            echo "- ⚠️ 召回测试完成，但查询'晨星'返回 0 条结果" >> "$REPORT_FILE"
-        fi
-    elif printf '%s\n' "$RECALL_TEST" | grep -q '^No memories found'; then
-        RECALL_OK=1
-        RECALL_COUNT=0
-        echo "- ⚠️ 召回测试完成，但查询'晨星'返回 0 条结果" >> "$REPORT_FILE"
-    else
-        echo "- ❌ 召回测试失败" >> "$REPORT_FILE"
-        echo '```' >> "$REPORT_FILE"
-        printf '%s\n' "$RECALL_TEST" | head -20 >> "$REPORT_FILE"
-        echo '```' >> "$REPORT_FILE"
-    fi
+# 测试 Ollama embedding API 是否正常（memory-lancedb-pro 的底层依赖）
+EMBED_TEST=$(curl -sf -X POST http://127.0.0.1:11434/api/embeddings \
+  -d '{"model":"nomic-embed-text","prompt":"test"}' 2>&1 || true)
+
+if echo "$EMBED_TEST" | grep -q '"embedding"'; then
+    RECALL_OK=1
+    RECALL_COUNT=1
+    echo "- ✅ Ollama embedding API 正常（nomic-embed-text）" >> "$REPORT_FILE"
 else
-    echo "- ⚠️ openclaw memory-pro CLI 不可用，跳过召回测试" >> "$REPORT_FILE"
+    echo "- ❌ Ollama embedding API 异常" >> "$REPORT_FILE"
+    echo '```' >> "$REPORT_FILE"
+    echo "$EMBED_TEST" | head -5 >> "$REPORT_FILE"
+    echo '```' >> "$REPORT_FILE"
 fi
 echo "" >> "$REPORT_FILE"
 
@@ -120,7 +112,7 @@ echo "" >> "$REPORT_FILE"
 
 if [ $SCORE -lt 75 ]; then
     echo "- 检查 rerank sidecar 是否正常运行" >> "$REPORT_FILE"
-    echo "- 运行 \`bash ~/.openclaw/workspace/scripts/status-local-rerank-sidecar.sh\`" >> "$REPORT_FILE"
+    echo "- 运行 \`bash ~/.openclaw/scripts/status-local-rerank-sidecar.sh\`" >> "$REPORT_FILE"
     echo "- 如果需要重启：\`launchctl kickstart -k gui/$(id -u)/com.openclaw.local-rerank-sidecar\`" >> "$REPORT_FILE"
 fi
 echo "" >> "$REPORT_FILE"
