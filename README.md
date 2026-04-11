@@ -1,6 +1,37 @@
 # Memory Architecture Manager
 
-优化 OpenClaw 记忆架构：Layer 1 本地文件 + Layer 2 插件 + Layer 3 可选深度归档。
+[![GitHub](https://img.shields.io/badge/GitHub-mouseroser-blue?logo=github)](https://github.com/mouseroser/memory-architecture-manager-skill)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![OpenClaw](https://img.shields.io/badge/OpenClaw-Skill-orange.svg)](https://openclaw.ai)
+
+管理和优化 OpenClaw 三层记忆架构的专业工具。
+
+## ✨ 特性
+
+- 📁 **Layer 1 管理** - 本地文件系统记忆优化
+- 🔌 **Layer 2 检测** - 自动检测插件安装状态
+- 🏥 **健康检查** - 定期检查记忆系统健康状态
+- 📊 **质量审计** - 记忆质量分析和优化建议
+- 🗜️ **智能压缩** - 自动压缩和归档历史记忆
+
+## 🚀 快速开始
+
+### 安装
+
+```bash
+cd ~/.openclaw/skills
+git clone https://github.com/mouseroser/memory-architecture-manager-skill.git memory-architecture-manager
+```
+
+### 使用
+
+```bash
+# 综合优化（推荐）
+bash ~/.openclaw/skills/memory-architecture-manager/scripts/optimize-memory-architecture.sh
+
+# Layer 2 健康检查
+bash ~/.openclaw/skills/memory-architecture-manager/scripts/layer2-health-check.sh
+```
 
 ## 核心功能
 
@@ -97,4 +128,27 @@ git clone https://github.com/mouseroser/memory-architecture-manager-skill.git me
 
 ---
 
-**最后更新**: 2026-04-05
+## 📝 更新日志
+
+### 2026-04-11
+- 优化 README 文档
+- 添加徽章和快速开始指南
+- 完善记忆架构说明
+
+### 2026-04-05
+- 初始版本发布
+
+---
+
+## 📄 License
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📧 联系
+
+- GitHub: [@mouseroser](https://github.com/mouseroser)
+- OpenClaw Community: [Discord](https://discord.com/invite/clawd)
